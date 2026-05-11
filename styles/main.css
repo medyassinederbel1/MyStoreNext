@@ -1,0 +1,85 @@
+
+@import './bootstrap.min.css';
+@import './style.css';
+@import './responsive.css';
+
+*, *::before, *::after { box-sizing: border-box; }
+
+#root {
+  min-height: 100vh;
+}
+
+
+.loading-spinner {
+  text-align: center;
+  padding: 3rem;
+  color: #888;
+}
+
+.error-message {
+  text-align: center;
+  padding: 2rem;
+  color: #e74c3c;
+}
+
+/* Backend offline banner */
+.backend-offline-banner {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  z-index: 9999;
+  background: #b91c1c;
+  color: #fff;
+  text-align: center;
+  padding: 14px 16px;
+  font-weight: 600;
+  font-size: 1rem;
+  letter-spacing: 0.01em;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.25);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+}
+
+.backend-offline-banner__icon {
+  font-size: 1.3rem;
+}
+
+/* Backend offline full-page screen */
+.backend-offline-screen {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+  background: #f9fafb;
+  padding-top: 60px;
+}
+
+.backend-offline-screen__card {
+  background: #fff;
+  border-radius: 12px;
+  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.10);
+  padding: 48px 40px;
+  text-align: center;
+  max-width: 420px;
+}
+
+.backend-offline-screen__icon {
+  font-size: 3.5rem;
+  margin-bottom: 16px;
+}
+
+.backend-offline-screen__title {
+  color: #b91c1c;
+  font-weight: 700;
+  margin-bottom: 12px;
+}
+
+.backend-offline-screen__text {
+  color: #6b7280;
+  font-size: 1rem;
+  margin: 0;
+}
