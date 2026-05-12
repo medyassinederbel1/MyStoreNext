@@ -8,13 +8,17 @@ import { getCategories } from '@/api/categories'
 import { getProducts, getProductById } from '@/api/products'
 import { getLastViewedIds } from '@/hooks/useViewedProducts'
 import { PRODUCTS_PER_PAGE } from '@/utils/constants'
-import type { ProductType } from '@/types'
+import type { Category, Product, ProductType } from '@/types'
 
-export function useShopFilters(forcedCategoryId?: string) {
+export function useShopFilters(
+  forcedCategoryId?: string,
+  initialProducts: Product[] = [],
+  initialTotal: number = 0,
+  initialCategories: Category[] = [],
+) {
   const searchParams = useSearchParams()
   const router = useRouter()
   const pathname = usePathname()
-
 
   const categoryId =
     forcedCategoryId !== undefined
@@ -47,7 +51,7 @@ export function useShopFilters(forcedCategoryId?: string) {
   useEffect(() => {
     const current = searchParamsRef.current
     const currentQ = current.get('q') ?? ''
-    if (debouncedSearch === currentQ) return 
+    if (debouncedSearch === currentQ) return
 
     const next = new URLSearchParams(current.toString())
     if (debouncedSearch) next.set('q', debouncedSearch); else next.delete('q')
@@ -62,16 +66,24 @@ export function useShopFilters(forcedCategoryId?: string) {
   else if (sortKey === 'price_desc') { _sort = 'price'; _order = 'desc' }
   else if (sortKey === 'review_desc') { _sort = 'review'; _order = 'desc' }
 
-  const { data: categoriesData } = useAsync(getCategories, [], { throwOnError: false })
-  const categories = categoriesData ?? []
+  const { data: categoriesData } = useAsync(
+    getCategories,
+    [],
+    { throwOnError: false, initialData: initialCategories.length > 0 ? initialCategories : null },
+  )
+  const categories = categoriesData ?? initialCategories
+
+  const initialProductsData = initialProducts.length > 0
+    ? { products: initialProducts, total: initialTotal }
+    : null
 
   const { data: productsData, loading, error: productsError } = useAsync(
     () =>
       isRecentlyViewed
         ? recentlyViewedIds.length > 0
-          ? Promise.all(recentlyViewedIds.map((id) => getProductById(id))).then((products) => ({
-              products,
-              total: products.length,
+          ? Promise.all(recentlyViewedIds.map((id) => getProductById(id))).then((prods) => ({
+              products: prods,
+              total: prods.length,
             }))
           : Promise.resolve({ products: [], total: 0 })
         : getProducts({
@@ -96,10 +108,11 @@ export function useShopFilters(forcedCategoryId?: string) {
       isRecentlyViewed,
       recentlyViewedIds.join(','),
     ],
+    { throwOnError: false, initialData: initialProductsData },
   )
 
-  const products = productsData?.products ?? []
-  const totalProducts = productsData?.total ?? 0
+  const products = productsData?.products ?? initialProducts
+  const totalProducts = productsData?.total ?? initialTotal
   const totalPages = Math.ceil(totalProducts / PRODUCTS_PER_PAGE)
 
   const setParam = useCallback((key: string, value: string) => {

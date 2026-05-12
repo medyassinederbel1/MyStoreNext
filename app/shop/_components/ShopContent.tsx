@@ -1,17 +1,28 @@
 'use client'
 
-import { useCallback } from 'react'
-import { useRouter } from 'next/navigation'
+import { useCallback, useState, useEffect } from 'react'
+import { useRouter, useSearchParams, usePathname } from 'next/navigation'
 import ShopSidebar from './ShopSidebar'
 import ProductGrid from './ProductGrid'
 import { useShopFilters } from '@/hooks/useShopFilters'
+import type { Category, Product } from '@/types'
 
 interface Props {
   categoryId?: string
+  initialProducts?: Product[]
+  initialTotal?: number
+  initialCategories?: Category[]
 }
 
-export default function ShopContent({ categoryId: forcedCategoryId }: Props = {}) {
+export default function ShopContent({
+  categoryId: forcedCategoryId,
+  initialProducts = [],
+  initialTotal = 0,
+  initialCategories = [],
+}: Props) {
   const router = useRouter()
+  const searchParams = useSearchParams()
+  const pathname = usePathname()
 
   const {
     categories,
@@ -28,7 +39,7 @@ export default function ShopContent({ categoryId: forcedCategoryId }: Props = {}
     setParam,
     handleCategoryClick,
     pageTitle,
-  } = useShopFilters(forcedCategoryId)
+  } = useShopFilters(forcedCategoryId, initialProducts, initialTotal, initialCategories)
 
   const onCategoryClick = useCallback(
     (id: string) => {

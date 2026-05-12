@@ -1,30 +1,14 @@
-import type { Metadata } from 'next'
 import Link from 'next/link'
-import Header from '@/components/layout/Header'
-import Navigation from '@/components/layout/Navigation'
-import Footer from '@/components/layout/Footer'
-import Carousel from './_components/Carousel'
-import ProductWidgetCard from './_components/ProductWidgetCard'
-import Brands from './_components/Brands'
-import PromoBar from './_components/PromoBar'
-import HomeWidgets from './_components/HomeClientWidgets'
-import RecentlyViewedWidget from './_components/RecentlyViewedWidget'
+import Carousel from './Carousel'
+import ProductWidgetCard from './ProductWidgetCard'
+import Brands from './Brands'
+import PromoBar from './PromoBar'
+import HomeWidgets from './HomeClientWidgets'
 import { getSlides } from '@/api/slides'
 import { getProducts } from '@/api/products'
 import { getCategories } from '@/api/categories'
 
-export const revalidate = 60
-
-// Disable streaming — send complete HTML in one shot (required for no-JS visibility)
-export const dynamic = 'force-static'
-
-export const metadata: Metadata = {
-  title: 'Accueil',
-  description:
-    'Découvrez notre sélection de smartphones, tablettes et montres connectées aux meilleurs prix.',
-}
-
-export default async function HomePage() {
+export default async function HomeContent() {
   const [slides, categories, topSellersData, topNewData] = await Promise.all([
     getSlides(),
     getCategories(),
@@ -37,17 +21,16 @@ export default async function HomePage() {
 
   return (
     <>
-      <Header />
-      <Navigation />
       <Carousel slides={slides} />
       <PromoBar />
       <Brands categories={categories} />
+
       <div className="product-widget-area">
         <div className="zigzag-bottom" />
         <div className="container">
           <div className="row">
             <HomeWidgets topSellers={topSellers} />
-            <RecentlyViewedWidget />
+
             <div className="col-md-4">
               <div className="single-product-widget">
                 <h2 className="product-wid-title">Nouveautés</h2>
@@ -62,7 +45,6 @@ export default async function HomePage() {
           </div>
         </div>
       </div>
-      <Footer />
     </>
   )
 }

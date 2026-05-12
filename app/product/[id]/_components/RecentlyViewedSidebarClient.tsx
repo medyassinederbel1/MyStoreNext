@@ -3,32 +3,28 @@
 import { useEffect, useState } from 'react'
 import Image from 'next/image'
 import Link from 'next/link'
-import { useAsync } from '@/hooks/useAsync'
 import { getProductById } from '@/api/products'
 import { getLastViewedIds, markAsViewed } from '@/hooks/useViewedProducts'
+import type { Product } from '@/types'
 
 interface Props {
   productId: number
 }
 
 export default function RecentlyViewedSidebarClient({ productId }: Props) {
-  const [lastViewedIds, setLastViewedIds] = useState<number[]>([])
+  const [recentlyViewed, setRecentlyViewed] = useState<Product[]>([])
 
   useEffect(() => {
     markAsViewed(productId)
-    setLastViewedIds(getLastViewedIds(5).filter((id) => id !== productId))
+    const ids = getLastViewedIds(5).filter((id) => id !== productId)
+    if (ids.length === 0) return
+
+    Promise.all(ids.map((id) => getProductById(id)))
+      .then(setRecentlyViewed)
+      .catch(() => {})
   }, [productId])
 
-  const { data: recentlyViewed } = useAsync(
-    () =>
-      lastViewedIds.length > 0
-        ? Promise.all(lastViewedIds.map((id) => getProductById(id)))
-        : Promise.resolve([]),
-    [lastViewedIds.join(',')],
-    { throwOnError: false },
-  )
-
-  if (!recentlyViewed || recentlyViewed.length === 0) return null
+  if (recentlyViewed.length === 0) return null
 
   return (
     <aside className="single-sidebar" aria-label="Récemment consultés">

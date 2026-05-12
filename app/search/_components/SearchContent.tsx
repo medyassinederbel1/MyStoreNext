@@ -1,21 +1,31 @@
 'use client'
 
-import { useState, useEffect, useCallback } from 'react'
+import { useState, useCallback, useEffect } from 'react'
 import { useSearchParams } from 'next/navigation'
 import { useAsync } from '@/hooks/useAsync'
 import { getProducts } from '@/api/products'
 import ProductShopCard from '@/components/shop/ProductShopCard'
 import Pagination from '@/components/shop/Pagination'
 import { SORT_OPTIONS } from '@/utils/constants'
+import type { Product } from '@/types'
 
 const LIMIT = 12
 
-export default function SearchContent() {
+interface Props {
+  initialProducts?: Product[]
+  initialTotal?: number
+  initialQ?: string
+}
+
+export default function SearchContent({
+  initialProducts = [],
+  initialTotal = 0,
+  initialQ = '',
+}: Props) {
   const searchParams = useSearchParams()
-  const q = searchParams.get('q') ?? ''
+  const q = searchParams.get('q') ?? initialQ
   const [page, setPage] = useState(1)
   const [sortKey, setSortKey] = useState('')
-
   useEffect(() => {
     setPage(1)
     setSortKey('')
@@ -25,7 +35,11 @@ export default function SearchContent() {
     ? (sortKey.split('_') as [string, 'asc' | 'desc'])
     : [undefined, undefined]
 
-  const { data, loading } = useAsync(
+  const initialData = initialProducts.length > 0
+    ? { products: initialProducts, total: initialTotal }
+    : null
+
+  const { data, loading: isLoading } = useAsync(
     () =>
       getProducts({
         q,
@@ -34,10 +48,11 @@ export default function SearchContent() {
         ...(sortField ? { _sort: sortField, _order: sortOrder } : {}),
       }),
     [q, page, sortKey],
+    { throwOnError: false, initialData },
   )
 
-  const products = data?.products ?? []
-  const total = data?.total ?? 0
+  const products = data?.products ?? initialProducts
+  const total = data?.total ?? initialTotal
   const totalPages = Math.ceil(total / LIMIT)
 
   const handlePageChange = useCallback((p: number) => {
@@ -75,7 +90,7 @@ export default function SearchContent() {
                 }}
               >
                 <span style={{ color: '#888', fontSize: 14 }} aria-live="polite">
-                  {loading
+                  {isLoading
                     ? 'Recherche en cours…'
                     : `${total} résultat${total !== 1 ? 's' : ''} pour « ${q} »`}
                 </span>
@@ -93,14 +108,14 @@ export default function SearchContent() {
                 </select>
               </div>
 
-              {!loading && total === 0 ? (
+              {!isLoading && total === 0 ? (
                 <div style={{ padding: '60px 0', textAlign: 'center', color: '#888' }}>
                   <i className="fa fa-search" style={{ fontSize: 40, marginBottom: 12, display: 'block' }} aria-hidden="true" />
                   <p>Aucun produit trouvé pour « {q} ».</p>
                 </div>
               ) : (
-                <div className="row" aria-live="polite" aria-busy={loading}>
-                  {loading
+                <div className="row" aria-live="polite" aria-busy={isLoading}>
+                  {isLoading
                     ? Array.from({ length: 8 }, (_, i) => (
                         <div key={i} className="col-md-3 col-sm-6" aria-hidden="true">
                           <div style={{ height: 280, background: '#f5f5f5', borderRadius: 4, marginBottom: 24 }} />

@@ -1,7 +1,7 @@
 import type { Metadata } from 'next'
 import Header from '@/components/layout/Header'
 import Footer from '@/components/layout/Footer'
-import CartContent from './components/CartContent'
+import CartContent from './_components/CartContent'
 
 export const metadata: Metadata = {
   title: 'Mon Panier',
