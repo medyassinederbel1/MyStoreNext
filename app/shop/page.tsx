@@ -1,7 +1,4 @@
 import type { Metadata } from 'next'
-import Header from '@/components/layout/Header'
-import Navigation from '@/components/layout/Navigation'
-import Footer from '@/components/layout/Footer'
 import ShopContent from './_components/ShopContent'
 import { getProducts } from '@/api/products'
 import { getCategories } from '@/api/categories'
@@ -44,15 +41,10 @@ export default async function ShopPage({ searchParams }: Props) {
   ])
 
   return (
-    <>
-      <Header />
-      <Navigation />
-      <ShopContent
-        initialProducts={productsData.products}
-        initialTotal={productsData.total}
-        initialCategories={categoriesData}
-      />
-      <Footer />
-    </>
+    <ShopContent
+      initialProducts={productsData.products}
+      initialTotal={productsData.total}
+      initialCategories={categoriesData}
+    />
   )
 }

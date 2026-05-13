@@ -2,9 +2,6 @@ import type { Metadata } from 'next'
 import Link from 'next/link'
 import Image from 'next/image'
 import { notFound } from 'next/navigation'
-import Header from '@/components/layout/Header'
-import Navigation from '@/components/layout/Navigation'
-import Footer from '@/components/layout/Footer'
 import ProductSidebar from './_components/ProductSidebar'
 import ProductInfo from './_components/ProductInfo'
 import ProductAddToCartClient from './_components/ProductAddToCartClient'
@@ -60,11 +57,7 @@ export default async function ProductDetailPage({ params }: Props) {
   const currentCategory = categories.find((c) => c.id === product.categoryId)
 
   return (
-    <>
-      <Header />
-      <Navigation />
-
-      <div className="single-product-area">
+    <div className="single-product-area">
         <div className="zigzag-bottom" />
         <div className="container">
           <div className="row">
@@ -117,7 +110,3 @@ export default async function ProductDetailPage({ params }: Props) {
         </div>
       </div>
 
-      <Footer />
-    </>
-  )
-}

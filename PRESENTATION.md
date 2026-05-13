@@ -61,7 +61,7 @@ nextjs/
 │   │
 │   ├── (home)/                        ← Route Group (pas de segment URL)
 │   │   ├── page.tsx                   ← SSR/ISR — Page d'accueil
-│   │   └── components/
+│   │   └── _components/              ← Dossier privé (convention Next.js)
 │   │       ├── Carousel.tsx           ← Server Component
 │   │       ├── CarouselSlider.tsx     ← Client Component ('use client')
 │   │       ├── Brands.tsx             ← Server Component
@@ -72,7 +72,7 @@ nextjs/
 │   ├── product/[id]/
 │   │   ├── page.tsx                   ← SSR/ISR — Fiche produit
 │   │   ├── error.tsx
-│   │   └── components/
+│   │   └── _components/
 │   │       ├── ProductInfo.tsx        ← Server Component
 │   │       ├── ProductSidebar.tsx     ← Server Component
 │   │       ├── ProductAddToCartClient.tsx  ← Client Component
@@ -84,19 +84,19 @@ nextjs/
 │   │   ├── [categoryId]/
 │   │   │   ├── page.tsx               ← SSR/ISR — Catalogue catégorie
 │   │   │   └── error.tsx
-│   │   └── components/
+│   │   └── _components/
 │   │       ├── ShopContent.tsx        ← Client Component (filtres URL)
 │   │       ├── ProductGrid.tsx        ← Client Component
 │   │       └── ShopSidebar.tsx        ← Client Component
 │   │
 │   ├── search/
 │   │   ├── page.tsx                   ← Server Component (wrapper Suspense)
-│   │   └── components/
+│   │   └── _components/
 │   │       └── SearchContent.tsx      ← Client Component
 │   │
 │   ├── cart/
 │   │   ├── page.tsx                   ← Server Component (shell)
-│   │   └── components/
+│   │   └── _components/
 │   │       ├── CartContent.tsx        ← Client Component
 │   │       ├── CartTable.tsx          ← Client Component
 │   │       ├── CartItem.tsx           ← Client Component
@@ -104,7 +104,7 @@ nextjs/
 │   │
 │   └── checkout/
 │       ├── page.tsx                   ← Server Component (shell)
-│       └── components/
+│       └── _components/
 │           ├── CheckoutContent.tsx    ← Client Component
 │           ├── CheckoutStepper.tsx    ← Server Component
 │           ├── Step1Address.tsx       ← Client Component
@@ -232,11 +232,11 @@ Après 60 secondes     →  Prochain visiteur reçoit l'ancien cache
 | `components/layout/Navigation.tsx` | Wrapper sémantique `<nav>`. Les liens actifs sont gérés par `NavLinks.tsx` (client). |
 | `components/layout/Footer.tsx` | Contenu statique. Le formulaire newsletter est isolé dans `FooterNewsletter.tsx` (client). |
 | `components/shop/ProductShopCard.tsx` | La carte produit est un composant d'affichage pur. L'interactivité (panier) est déléguée à `ProductShopCardActions.tsx` (client). |
-| `app/(home)/components/Brands.tsx` | Affichage de logos. Aucune interactivité. |
-| `app/(home)/components/PromoBar.tsx` | Texte statique. Aucune interactivité. |
-| `app/(home)/components/ProductWidgetCard.tsx` | Affichage d'une vignette produit. Aucune interactivité. |
-| `app/product/[id]/components/ProductInfo.tsx` | Affiche le nom, prix, note, stock. Données reçues en props depuis la page SSR. |
-| `app/product/[id]/components/ProductSidebar.tsx` | Liste de catégories. Données statiques reçues en props. |
+| `app/(home)/_components/Brands.tsx` | Affichage de logos. Aucune interactivité. |
+| `app/(home)/_components/PromoBar.tsx` | Texte statique. Aucune interactivité. |
+| `app/(home)/_components/ProductWidgetCard.tsx` | Affichage d'une vignette produit. Aucune interactivité. |
+| `app/product/[id]/_components/ProductInfo.tsx` | Affiche le nom, prix, note, stock. Données reçues en props depuis la page SSR. |
+| `app/product/[id]/_components/ProductSidebar.tsx` | Liste de catégories. Données statiques reçues en props. |
 
 ### Composants Client (avec 'use client')
 
@@ -248,19 +248,19 @@ Après 60 secondes     →  Prochain visiteur reçoit l'ancien cache
 | `components/layout/FooterNewsletter.tsx` | `useState` pour le formulaire et le message de succès. |
 | `components/shop/ProductShopCardActions.tsx` | `useCart()`, `useState` (viewed), `useEffect` pour localStorage. |
 | `components/shop/Pagination.tsx` | `onClick` pour changer de page. |
-| `app/(home)/components/CarouselSlider.tsx` | react-slick accède à `window` — incompatible serveur. Importé via `dynamic({ ssr: false })`. |
-| `app/(home)/components/HomeClientWidgets.tsx` | `useAsync` + `useState` pour les onglets Top Sellers / Featured. |
-| `app/shop/components/ShopContent.tsx` | `useSearchParams`, `useRouter` pour les filtres URL. |
-| `app/shop/components/ShopSidebar.tsx` | `useState` pour les filtres actifs. |
-| `app/shop/components/ProductGrid.tsx` | `aria-busy={loading}` dynamique, skeleton loading. |
-| `app/search/components/SearchContent.tsx` | `useSearchParams()` pour lire `?q=`. |
-| `app/cart/components/CartContent.tsx` | `useSelector` Redux pour lire le panier. |
-| `app/cart/components/CartItem.tsx` | `useCart()` — dispatch updateCart, removeItem. |
-| `app/cart/components/CartSummary.tsx` | `useCart()` — affichage total. |
-| `app/checkout/components/Step1Address.tsx` | `useState` pour formulaire + validation Zod. |
-| `app/checkout/components/Step2Payment.tsx` | `useState`, `useDispatch`, appel API `postOrder`. |
-| `app/product/[id]/components/ProductAddToCartClient.tsx` | `useCart()` + `useState` quantité. |
-| `app/product/[id]/components/RecentlyViewedSidebarClient.tsx` | `useEffect` pour localStorage `viewedProducts`. |
+| `app/(home)/_components/CarouselSlider.tsx` | react-slick accède à `window` — incompatible serveur. Importé via `dynamic({ ssr: false })`. |
+| `app/(home)/_components/HomeClientWidgets.tsx` | `useAsync` + `useState` pour les onglets Top Sellers / Featured. |
+| `app/shop/_components/ShopContent.tsx` | `useSearchParams`, `useRouter` pour les filtres URL. |
+| `app/shop/_components/ShopSidebar.tsx` | `useState` pour les filtres actifs. |
+| `app/shop/_components/ProductGrid.tsx` | `aria-busy={loading}` dynamique, skeleton loading. |
+| `app/search/_components/SearchContent.tsx` | `useSearchParams()` pour lire `?q=`. |
+| `app/cart/_components/CartContent.tsx` | `useSelector` Redux pour lire le panier. |
+| `app/cart/_components/CartItem.tsx` | `useCart()` — dispatch updateCart, removeItem. |
+| `app/cart/_components/CartSummary.tsx` | `useCart()` — affichage total. |
+| `app/checkout/_components/Step1Address.tsx` | `useState` pour formulaire + validation Zod. |
+| `app/checkout/_components/Step2Payment.tsx` | `useState`, `useDispatch`, appel API `postOrder`. |
+| `app/product/[id]/_components/ProductAddToCartClient.tsx` | `useCart()` + `useState` quantité. |
+| `app/product/[id]/_components/RecentlyViewedSidebarClient.tsx` | `useEffect` pour localStorage `viewedProducts`. |
 
 ---
 
@@ -637,11 +637,11 @@ const nameSchema = z.string()
 
 ---
 
-**Q : Pourquoi co-localiser les composants dans `app/<route>/components/` ?**
+**Q : Pourquoi co-localiser les composants dans `app/<route>/_components/` ?**
 
-> C'est une **architecture feature-based** (recommandée par Next.js). Les composants qui ne sont utilisés que par une seule route vivent à côté de cette route. Cela évite que `components/` devienne un fourre-tout de centaines de fichiers.
+> C'est une **architecture feature-based** (recommandée par Next.js). Les composants qui ne sont utilisés que par une seule route vivent à côté de cette route dans un dossier `_components/`. Le préfixe `_` est une **convention Next.js App Router** qui marque le dossier comme **privé** — Next.js l'exclut automatiquement du système de routing, même si un fichier `page.tsx` y était ajouté par erreur.
 >
-> Seuls les composants réutilisés par plusieurs routes (Header, Footer, ProductShopCard, Pagination) restent dans `components/`.
+> Seuls les composants réutilisés par plusieurs routes (Header, Footer, ProductShopCard, Pagination) restent dans `components/` à la racine de `nextjs/`.
 
 ---
 
@@ -651,7 +651,17 @@ const nameSchema = z.string()
 >
 > `app/(home)/page.tsx` est accessible à `/` et non `/home`.
 >
-> Cela permet de co-localiser `Carousel.tsx`, `Brands.tsx`, etc. avec la page d'accueil sans créer de route parasite.
+> Cela permet de co-localiser `Carousel.tsx`, `Brands.tsx`, etc. dans `_components/` avec la page d'accueil sans créer de route parasite.
+
+---
+
+**Q : Pourquoi nommer les dossiers de composants `_components` et pas `components` ?**
+
+> C'est la **convention officielle Next.js App Router** pour les **dossiers privés**. Le préfixe `_` signale à Next.js que ce dossier doit être **exclu du système de routing**, même s'il se trouve dans `app/`.
+>
+> Sans ce préfixe, Next.js pourrait tenter d'interpréter un fichier `page.tsx` placé accidentellement dans `components/` comme une route accessible. Avec `_components/`, ce risque est éliminé.
+>
+> Les dossiers `_components/` co-localisés (à côté de chaque route) contiennent les composants **privés à cette route**. Le dossier `components/` à la racine (hors `app/`) reste sans préfixe car il est hors du scope du routeur.
 
 ---
 

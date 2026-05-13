@@ -1,6 +1,4 @@
 import type { Metadata } from 'next'
-import Header from '@/components/layout/Header'
-import Footer from '@/components/layout/Footer'
 import CartContent from './_components/CartContent'
 
 export const metadata: Metadata = {
@@ -9,11 +7,5 @@ export const metadata: Metadata = {
 }
 
 export default function CartPage() {
-  return (
-    <>
-      <Header />
-      <CartContent />
-      <Footer />
-    </>
-  )
+  return <CartContent />
 }

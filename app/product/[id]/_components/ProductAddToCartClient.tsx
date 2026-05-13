@@ -48,6 +48,7 @@ export default function ProductAddToCartClient({ product }: Props) {
       >
         <button
           type="button"
+          className="minus"
           onClick={() => setQuantity((q) => Math.max(1, q - 1))}
           disabled={quantity <= 1}
           aria-label="Diminuer la quantité"
@@ -69,6 +70,7 @@ export default function ProductAddToCartClient({ product }: Props) {
         />
         <button
           type="button"
+          className="plus"
           onClick={() => setQuantity((q) => q + 1)}
           aria-label="Augmenter la quantité"
           style={btnStyle}

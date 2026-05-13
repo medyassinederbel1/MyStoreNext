@@ -1,8 +1,5 @@
 import type { Metadata } from 'next'
 import Link from 'next/link'
-import Header from '@/components/layout/Header'
-import Navigation from '@/components/layout/Navigation'
-import Footer from '@/components/layout/Footer'
 import Carousel from './_components/Carousel'
 import ProductWidgetCard from './_components/ProductWidgetCard'
 import Brands from './_components/Brands'
@@ -37,8 +34,6 @@ export default async function HomePage() {
 
   return (
     <>
-      <Header />
-      <Navigation />
       <Carousel slides={slides} />
       <PromoBar />
       <Brands categories={categories} />
@@ -62,7 +57,6 @@ export default async function HomePage() {
           </div>
         </div>
       </div>
-      <Footer />
     </>
   )
 }
